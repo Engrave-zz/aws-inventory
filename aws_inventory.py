@@ -314,7 +314,7 @@ def main(args):
         print 'Total operations to invoke: {}'.format(ops_count)
     else:
         LOGGER.debug('Total operations to invoke: %d.', ops_count)
-        aws_inventory.invoker.ApiInvoker(args, service_descriptors, ops_count).start()
+        aws_inventory.invoker.ApiInvoker(args, service_descriptors, ops_count)._probe_services()
 
 if __name__ == '__main__':
     main(parse_args())

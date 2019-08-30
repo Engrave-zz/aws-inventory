@@ -21,7 +21,6 @@ class ApiInvoker(object):
         self.script_args = script_args
         self.svc_descriptors = svc_descriptors
         self.ops_count = ops_count
-        self.progress_bar = None
         self.store = store.ResultStore(script_args.profile)
 
         # search for AWS credentials
@@ -35,14 +34,6 @@ class ApiInvoker(object):
         if not self.credentials['AccessKeyId']:
             raise EnvironmentError('Failed to get AWS account credentials.')
         LOGGER.info('Using AWS credential key ID: %s.', self.credentials['AccessKeyId'])
-
-    def start(self):
-        """Start the invoker with associated GUI. Wait for GUI to stop."""
-        self.progress_bar = progress.GuiProgressBar(
-            'AWS Inventory',
-            self.ops_count,
-            self._probe_services)
-        self.progress_bar.mainloop()
 
     def _probe_services(self):
         try:
@@ -63,7 +54,6 @@ class ApiInvoker(object):
                           'dry_run': self.script_args.dry_run,
                           'store': self.store}
                 for region in regions:
-                    self.progress_bar.update_svc_text(svc_name, region)
                     try:
                         client = session.create_client(
                             svc_name,
@@ -94,8 +84,6 @@ class ApiInvoker(object):
                         operations,
                         self.svc_worker,
                         params)
-                    self.progress_bar.update_progress(len(operations))
-            self.progress_bar.finish_work()
             self.write_results()
         except progress.LifetimeError as e:
             LOGGER.debug(e)

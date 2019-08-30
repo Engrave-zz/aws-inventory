@@ -11,6 +11,7 @@ import AwsIHomeArea from './home-area';
 import AwsIHelpArea from './help-area';
 import AwsIInventoryArea from './inventory-area';
 import './App.css';
+import myData from '../aws_inventory_data-default.json';
 
 
 class App extends Component {
