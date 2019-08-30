@@ -243,7 +243,7 @@ def main(args):
     setup_logging(args.debug)
 
     if args.version:
-        print(aws_inventory.__version__)
+        print aws_inventory.__version__
         return
 
     api_model = build_api_model()
